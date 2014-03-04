@@ -152,11 +152,15 @@ end;
 function numbers(nel,ien,xn,nnp,nsd)
 % number the nodes in the undeformed configuration
 for n=1:nnp
-    if (nsd > 1)
+    if (nsd == 3)
+        text(xn(1,n),xn(2,n), xn(3,n), num2str(n),'FontSize',14);
+    end
+    if (nsd == 2)
         text(xn(1,n),xn(2,n), num2str(n),'FontSize',14);
-    else
+    end
+    if (nsd == 1)
         text(xn(1,n),0, num2str(n),'FontSize',14);
-    end;
+    end
 end
 % number the elements in the undeformed configuration
 for e=1:nel
@@ -165,9 +169,13 @@ for e=1:nel
     %compute the coordinates of the middle point
     xg=0.5*(xn(:,node1)+xn(:,node2));
     s=sprintf('(%d)', e);
-    if (nsd > 1)
+    if (nsd == 3)
+        text(xg(1),xg(2), xg(3), s,'FontSize',14);
+    end
+    if (nsd == 2)
         text(xg(1),xg(2), s,'FontSize',14);
-    else
+    end
+    if (nsd == 1)
         text(xg(1),0, s,'FontSize',14);
     end;
 end
