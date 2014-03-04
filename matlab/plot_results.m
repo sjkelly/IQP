@@ -39,7 +39,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 axis equal;
                 title('Undeformed mesh and BCs');
                 hold on;
-                plot_mesh_underformed(nel,ien,xn,nnp,nsd);
+                plot_mesh_undeformed(nel,ien,xn,nnp,nsd);
                 numbers(nel,ien,xn,nnp,nsd);
                 plot_bc_displacements(type,Lcar,display_factor,nnp,Idb,xn,nsd);
                 plot_bc_force(type,Lcar,f,display_factor,nnp,xn,nsd);
@@ -50,7 +50,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 axis equal;
                 title('Undeformed and deformed mesh');
                 hold on;
-                plot_mesh_underformed(nel,ien,xn,nnp,nsd);
+                plot_mesh_undeformed(nel,ien,xn,nnp,nsd);
                 numbers(nel,ien,xn,nnp,nsd);
                 plot_mesh_deformed(type,xn,Ucomp,Idb,display_factor,Lcar,nel,ien,ndf,nsd,nen);
                 view(nsd);
@@ -60,7 +60,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 axis equal;
                 title('reactions');
                 hold on;
-                plot_mesh_underformed(nel,ien,xn,nnp,nsd);
+                plot_mesh_undeformed(nel,ien,xn,nnp,nsd);
                 plot_reactions(type,Lcar,Rcomp,Idb,display_factor,xn,nnp,ndf,nsd)
                 view(nsd);
                 hold off;
@@ -123,7 +123,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % undeformed configuration %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function plot_mesh_underformed(nel,ien,xn,nnp,nsd)
+function plot_mesh_undeformed(nel,ien,xn,nnp,nsd)
 for e=1:nel
     node1=ien(1,e);
     node2=ien(2,e);
