@@ -43,6 +43,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 numbers(nel,ien,xn,nnp,nsd);
                 plot_bc_displacements(type,Lcar,display_factor,nnp,Idb,xn,nsd);
                 plot_bc_force(type,Lcar,f,display_factor,nnp,xn,nsd);
+                view(nsd);
                 hold off;
             case 2
                 figure;
@@ -52,6 +53,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 plot_mesh_underformed(nel,ien,xn,nnp,nsd);
                 numbers(nel,ien,xn,nnp,nsd);
                 plot_mesh_deformed(type,xn,Ucomp,Idb,display_factor,Lcar,nel,ien,ndf,nsd,nen);
+                view(nsd);
                 hold off;
             case 3
                 figure;
@@ -60,6 +62,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 hold on;
                 plot_mesh_underformed(nel,ien,xn,nnp,nsd);
                 plot_reactions(type,Lcar,Rcomp,Idb,display_factor,xn,nnp,ndf,nsd)
+                view(nsd);
                 hold off;
         end
     end
