@@ -252,9 +252,11 @@ switch type
                     xt(i,2)=xt(i,2)+scale*Ucomp(i,node2);
                 end;
             end;
-            plot(xt(1,:),xt(2,:)','r-o');
+            if nsd < 3
+                plot(xt(1,:),xt(2,:)','r-o');
+            end
             if nsd == 3
-                line(xt(1,:),xt(2,:),xt(3,:));
+                plot3(xt(1,:),xt(2,:),xt(3,:), 'r-o');
             end
         end
     case 'beam'
