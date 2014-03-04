@@ -517,12 +517,19 @@ function plot_bc_force(type,Lcar,f,display_factor,nnp,xn,nsd)
 delta=display_factor*Lcar/max(max(abs(f))); % scale factor for force b.c.
 alpha=2*display_factor*Lcar; % scale factor for moment
 for N=1:nnp
-    if ( nsd >1)
-        if ( (f(1,N) ~=0 ) | (f(2,N) ~= 0))
+    if ( nsd == 3)
+        if ( (f(1,N) ~= 0 ) | (f(2,N) ~= 0) | (f(3,N) ~= 0))
+            quiver3(xn(1,N),xn(2,N),xn(3,N),f(1,N),f(2,N),f(3,N),delta,'k');
+        end;
+    end
+    if ( nsd == 2)
+        if ( (f(1,N) ~= 0 ) | (f(2,N) ~= 0))
             quiver(xn(1,N),xn(2,N),f(1,N),f(2,N),delta,'k');
         end;
-    else
-        if (f(1,N) ~=0) quiver(xn(1,N),0,f(1,N),0,delta,'k');
+    end
+    if ( nsd == 1) 
+        if (f(1,N) ~=0)
+            quiver(xn(1,N),0,f(1,N),0,delta,'k');
         end;
     end;
 end;
