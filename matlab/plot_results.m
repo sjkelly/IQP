@@ -39,6 +39,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 axis equal;
                 title('Undeformed mesh and BCs');
                 hold on;
+                set(gcf, 'Color', [1,1,1]); %Background color white
                 plot_mesh_undeformed(nel,ien,xn,nnp,nsd);
                 numbers(nel,ien,xn,nnp,nsd);
                 plot_bc_displacements(type,Lcar,display_factor,nnp,Idb,xn,nsd);
@@ -50,6 +51,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 axis equal;
                 title('Undeformed and deformed mesh');
                 hold on;
+                set(gcf, 'Color', [1,1,1]); %Background color white
                 plot_mesh_undeformed(nel,ien,xn,nnp,nsd);
                 numbers(nel,ien,xn,nnp,nsd);
                 plot_mesh_deformed(type,xn,Ucomp,Idb,display_factor,Lcar,nel,ien,ndf,nsd,nen);
@@ -60,6 +62,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 axis equal;
                 title('reactions');
                 hold on;
+                set(gcf, 'Color', [1,1,1]); %Background color
                 plot_mesh_undeformed(nel,ien,xn,nnp,nsd);
                 plot_reactions(type,Lcar,Rcomp,Idb,display_factor,xn,nnp,ndf,nsd)
                 view(nsd);
