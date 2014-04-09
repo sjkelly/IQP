@@ -143,9 +143,9 @@ for e=1:nel
         y0=[0;0];
     end;
     if nsd < 3
-        plot(x0,y0,'b-o');
+        plot(x0,y0,'k-o');
     else
-        line(x0,y0,z0);
+        line(x0,y0,z0,'Color','k');
     end
 end;
 
