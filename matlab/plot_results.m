@@ -31,7 +31,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
     k=0;
     
     while (k~=4)
-        k=menu('results','undeformed mesh and BCs', 'undeformed and deformed mesh','reactions','exit');
+        k=menu('Results','Undeformed mesh and BCs', 'Undeformed and deformed mesh','Reactions','Exit');
         
         switch k
             case 1
@@ -60,7 +60,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
             case 3
                 figure;
                 axis equal;
-                title('reactions');
+                title('Reactions');
                 hold on;
                 set(gcf, 'Color', [1,1,1]); %Background color
                 plot_mesh_undeformed(nel,ien,xn,nnp,nsd);
@@ -498,38 +498,38 @@ switch type
         for P=1:nnp
             if (nsd >1)
                 if ((Idb(1,P) ~= 0) & (Idb(2,P) ~= 0))
-                    bc_symbols(xn(:,P),alpha,3);
+                    bc_symbols(xn(:,P),alpha,3,nsd);
                 end;
                 if ((Idb(1,P) ~= 0) & (Idb(2,P) == 0))
-                    bc_symbols(xn(:,P),alpha,2);
+                    bc_symbols(xn(:,P),alpha,2,nsd);
                 end;
                 if ((Idb(1,P) == 0) & (Idb(2,P) ~= 0))
-                    bc_symbols(xn(:,P),alpha,1);
+                    bc_symbols(xn(:,P),alpha,1,nsd);
                 end;
             else
-                if (Idb(1,P) ~= 0) bc_symbols([xn(1,P),0],alpha,2);
+                if (Idb(1,P) ~= 0) bc_symbols([xn(1,P),0],alpha,2,nsd);
                 end;
             end;
         end;
     case 'beam'
         for P=1:nnp
             if ((Idb(1,P) ~= 0) & (Idb(2,P) ~= 0) & (Idb(3,P) == 0))
-                bc_symbols(xn(:,P),alpha,3);
+                bc_symbols(xn(:,P),alpha,3,nsd);
             end;
             if ((Idb(1,P) ~= 0) & (Idb(2,P) == 0) & (Idb(3,P) == 0))
-                bc_symbols(xn(:,P),alpha,2);
+                bc_symbols(xn(:,P),alpha,2,nsd);
             end;
             if ((Idb(1,P) == 0) & (Idb(2,P) ~= 0) & (Idb(3,P) == 0))
-                bc_symbols(xn(:,P),alpha,1);
+                bc_symbols(xn(:,P),alpha,1,nsd);
             end;
             if ((Idb(1,P) == 0) & (Idb(2,P) ~= 0) & (Idb(3,P) ~= 0))
-                bc_symbols(xn(:,P),alpha,4);
+                bc_symbols(xn(:,P),alpha,4,nsd);
             end;
             if ((Idb(1,P) ~= 0) & (Idb(2,P) == 0) & (Idb(3,P) ~= 0))
-                bc_symbols(xn(:,P),alpha,5);
+                bc_symbols(xn(:,P),alpha,5,nsd);
             end;
             if ((Idb(1,P) ~= 0) & (Idb(2,P) ~= 0) & (Idb(3,P) ~= 0))
-                bc_symbols(xn(:,P),alpha,6);
+                bc_symbols(xn(:,P),alpha,6,nsd);
             end;
         end;
     otherwise
@@ -582,12 +582,13 @@ for N=1:nnp
     RN=zeros(ndf);
     if (nsd == 3)
         if ( (Idb(1,N) ~= 0 ) | (Idb(2,N) ~= 0) | (Idb(3,N) ~= 0))
-            quiver3(xn(1,N),xn(2,N),xn(3,N),Rcomp(1,N),Rcomp(2,N),Rcomp(3,N),beta,'k','LineWidth',2);
+            h = quiver3(xn(1,N),xn(2,N),xn(3,N),Rcomp(1,N),Rcomp(2,N),Rcomp(3,N),beta,'r-o','LineWidth',2);
+            adjust_quiver_arrowhead_size(h, 0.5/beta);
         end;
     end
     if (nsd == 2)
         if ((Idb(1,N) ~= 0) | (Idb(2,N) ~= 0))
-            h = quiver(xn(1,N),xn(2,N),Rcomp(1,N),Rcomp(2,N),beta,'k', 'LineWidth', 2);
+            h = quiver(xn(1,N),xn(2,N),Rcomp(1,N),Rcomp(2,N),beta,'r-o', 'LineWidth', 2);
             adjust_quiver_arrowhead_size(h, 0.5/beta);
         end;
         if (strcmp(type, 'beam') & (Idb(3,N) ~= 0))
@@ -614,75 +615,143 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              BOUNDARY CONDITIONS SYMBOLS                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function bc_symbols(xp,alpha,symbol);
+function bc_symbols(xp,alpha,symbol,nsd);
+if (nsd < 3)
+    switch symbol
+        case 1
+            % v fixed
+            x=[xp(1);xp(1)-alpha/2;xp(1)+alpha/2;xp(1)];
+            y=[xp(2);xp(2)-(3/4)*alpha;xp(2)-(3/4)*alpha;xp(2)];
 
-switch symbol
-    case 1
-        % v fixed
-        x=[xp(1);xp(1)-alpha/2;xp(1)+alpha/2;xp(1)];
-        y=[xp(2);xp(2)-(3/4)*alpha;xp(2)-(3/4)*alpha;xp(2)];
-        
-        line(x,y,'Color','k','LineWidth',1.2);
-        
-        for i=0:3,
-            circle([xp(1)-(3/8)*alpha+i*alpha/4; xp(2)-(7/8)*alpha],alpha/8);
-        end;
-        
-        
-    case 2
-        % u fixed
-        x=[xp(1);xp(1)-(3/4)*alpha;xp(1)-(3/4)*alpha;xp(1)];
-        y=[xp(2);xp(2)+(1/2)*alpha;xp(2)-(1/2)*alpha;xp(2)];
-        
-        line(x,y,'Color','k','LineWidth',1.2);
-        
-        for i=0:3,
-            circle([xp(1)-(7/8)*alpha;xp(2)-(3/8)*alpha+i*alpha/4],alpha/8);
-        end;
-        
-    case 3
-        % u and v fixed
-        x=[xp(1);xp(1)-alpha/2;xp(1)+alpha/2;xp(1)];
-        y=[xp(2);xp(2)-(3/4)*alpha;xp(2)-(3/4)*alpha;xp(2)];
-        
-        line(x,y,'Color','k','LineWidth',1.2);
-        
-        for i=0:3,
-            line([xp(1)-(alpha/4)+i*alpha/4;xp(1)-(alpha/2)+i*(alpha/4)], ...
-                [xp(2)-(3/4)*alpha;xp(2)-alpha],'Color','k','LineWidth',1.2);
-        end;
-        
-    case 4
-        % v and theta fixed
-        x=[xp(1)-alpha/2;xp(1)+alpha/2];
-        y=[xp(2);xp(2)];
-        
-        line(x,y,'Color','k','LineWidth',1.2);
-        
-        for i=0:3,
-            circle([xp(1)-(3/8)*alpha+i*alpha/4; xp(2)-(1/8)*alpha],alpha/8);
-        end;
-        
-    case 5
-        % u and theta fixed
-        x=[xp(1);xp(1)];
-        y=[xp(2)+(1/2)*alpha;xp(2)-(1/2)*alpha];
-        
-        line(x,y,'Color','k','LineWidth',1.2);
-        
-        for i=0:3,
-            circle([xp(1)-(1/8)*alpha;xp(2)-(3/8)*alpha+i*alpha/4],alpha/8);
-        end;
-        
-    case 6
-        % u, v and theta fixed
-        line([xp(1)-alpha/2;xp(1)+alpha/2],[xp(2),xp(2)],'Color','k','LineWidth',1.2);
-        for i=0:3,
-            line([xp(1)-alpha/2+(i+1)*alpha/4, xp(1)-alpha/2+i*alpha/4],[xp(2),xp(2)-alpha/4]...
-                ,'Color','k','LineWidth',1.2);
-        end;
-        
-end;
+            line(x,y,'Color','k','LineWidth',1.2);
+
+            for i=0:3,
+                circle([xp(1)-(3/8)*alpha+i*alpha/4; xp(2)-(7/8)*alpha],alpha/8);
+            end;
+
+
+        case 2
+            % u fixed
+            x=[xp(1);xp(1)-(3/4)*alpha;xp(1)-(3/4)*alpha;xp(1)];
+            y=[xp(2);xp(2)+(1/2)*alpha;xp(2)-(1/2)*alpha;xp(2)];
+
+            line(x,y,'Color','k','LineWidth',1.2);
+
+            for i=0:3,
+                circle([xp(1)-(7/8)*alpha;xp(2)-(3/8)*alpha+i*alpha/4],alpha/8);
+            end;
+
+        case 3
+            % u and v fixed
+            x=[xp(1);xp(1)-alpha/2;xp(1)+alpha/2;xp(1)];
+            y=[xp(2);xp(2)-(3/4)*alpha;xp(2)-(3/4)*alpha;xp(2)];
+
+            line(x,y,'Color','k','LineWidth',1.2);
+
+            for i=0:3,
+                line([xp(1)-(alpha/4)+i*alpha/4;xp(1)-(alpha/2)+i*(alpha/4)], ...
+                    [xp(2)-(3/4)*alpha;xp(2)-alpha],'Color','k','LineWidth',1.2);
+            end;
+
+        case 4
+            % v and theta fixed
+            x=[xp(1)-alpha/2;xp(1)+alpha/2];
+            y=[xp(2);xp(2)];
+
+            line(x,y,'Color','k','LineWidth',1.2);
+
+            for i=0:3,
+                circle([xp(1)-(3/8)*alpha+i*alpha/4; xp(2)-(1/8)*alpha],alpha/8);
+            end;
+
+        case 5
+            % u and theta fixed
+            x=[xp(1);xp(1)];
+            y=[xp(2)+(1/2)*alpha;xp(2)-(1/2)*alpha];
+
+            line(x,y,'Color','k','LineWidth',1.2);
+
+            for i=0:3,
+                circle([xp(1)-(1/8)*alpha;xp(2)-(3/8)*alpha+i*alpha/4],alpha/8);
+            end;
+
+        case 6
+            % u, v and theta fixed
+            line([xp(1)-alpha/2;xp(1)+alpha/2],[xp(2),xp(2)],'Color','k','LineWidth',1.2);
+            for i=0:3,
+                line([xp(1)-alpha/2+(i+1)*alpha/4, xp(1)-alpha/2+i*alpha/4],[xp(2),xp(2)-alpha/4]...
+                    ,'Color','k','LineWidth',1.2);
+            end;
+    end
+end
+if (nsd ==3)
+%     switch symbol
+%         case 1
+%             % v fixed
+%             x=[xp(1);xp(1)-alpha/2;xp(1)+alpha/2;xp(1)];
+%             y=[xp(2);xp(2)-(3/4)*alpha;xp(2)-(3/4)*alpha;xp(2)];
+% 
+%             line(x,y,'Color','k','LineWidth',1.2);
+% 
+%             for i=0:3,
+%                 circle([xp(1)-(3/8)*alpha+i*alpha/4; xp(2)-(7/8)*alpha],alpha/8);
+%             end;
+% 
+% 
+%         case 2
+%             % u fixed
+%             x=[xp(1);xp(1)-(3/4)*alpha;xp(1)-(3/4)*alpha;xp(1)];
+%             y=[xp(2);xp(2)+(1/2)*alpha;xp(2)-(1/2)*alpha;xp(2)];
+% 
+%             line(x,y,'Color','k','LineWidth',1.2);
+% 
+%             for i=0:3,
+%                 circle([xp(1)-(7/8)*alpha;xp(2)-(3/8)*alpha+i*alpha/4],alpha/8);
+%             end;
+% 
+%         case 3
+%             % u and v fixed
+%             x=[xp(1);xp(1)-alpha/2;xp(1)+alpha/2;xp(1)];
+%             y=[xp(2);xp(2)-(3/4)*alpha;xp(2)-(3/4)*alpha;xp(2)];
+% 
+%             line(x,y,'Color','k','LineWidth',1.2);
+% 
+%             for i=0:3,
+%                 line([xp(1)-(alpha/4)+i*alpha/4;xp(1)-(alpha/2)+i*(alpha/4)], ...
+%                     [xp(2)-(3/4)*alpha;xp(2)-alpha],'Color','k','LineWidth',1.2);
+%             end;
+% 
+%         case 4
+%             % v and theta fixed
+%             x=[xp(1)-alpha/2;xp(1)+alpha/2];
+%             y=[xp(2);xp(2)];
+% 
+%             line(x,y,'Color','k','LineWidth',1.2);
+% 
+%             for i=0:3,
+%                 circle([xp(1)-(3/8)*alpha+i*alpha/4; xp(2)-(1/8)*alpha],alpha/8);
+%             end;
+% 
+%         case 5
+%             % u and theta fixed
+%             x=[xp(1);xp(1)];
+%             y=[xp(2)+(1/2)*alpha;xp(2)-(1/2)*alpha];
+% 
+%             line(x,y,'Color','k','LineWidth',1.2);
+% 
+%             for i=0:3,
+%                 circle([xp(1)-(1/8)*alpha;xp(2)-(3/8)*alpha+i*alpha/4],alpha/8);
+%             end;
+% 
+%         case 6
+%             % u, v and theta fixed
+%             line([xp(1)-alpha/2;xp(1)+alpha/2],[xp(2),xp(2)],'Color','k','LineWidth',1.2);
+%             for i=0:3,
+%                 line([xp(1)-alpha/2+(i+1)*alpha/4, xp(1)-alpha/2+i*alpha/4],[xp(2),xp(2)-alpha/4]...
+%                     ,'Color','k','LineWidth',1.2);
+%             end;
+%     end
+end
 
 
 
@@ -907,6 +976,10 @@ function adjust_quiver_arrowhead_size(quivergroup_handle, scaling_factor)
 % December 21, 2011
 % BMT Scientific Marine Services (www.scimar.com)
 
+% Steve Kelly (kd2cca@gmail.com)
+% 2014-04-09
+% Worcester Polytechnic Institute
+
 if ~exist('quivergroup_handle', 'var')
     help(mfilename);
     return
@@ -958,6 +1031,7 @@ arrowhead_line = line_handles(2);
 
 XData = get(arrowhead_line, 'XData');
 YData = get(arrowhead_line, 'YData');
+ZData = get(arrowhead_line, 'ZData');
 
 if isempty(XData) || isempty(YData)
     return
