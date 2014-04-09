@@ -5,7 +5,7 @@
 % plot results and b.c. for trusses,beams, heat conduction %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function plot_results(type,xn,f,Idb,Ucomp,Rcomp,ien,nel,nen,nsd,ndf,nnp);
+function plot_results(type,xn,f,Idb,Ucomp,Rcomp,ien,nel,nen,nsd,ndf,nnp,axial);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                       TRUSS AND BEAM                                       %
@@ -54,7 +54,7 @@ if ( strcmp(type, 'truss') | strcmp(type,'beam'))
                 set(gcf, 'Color', [1,1,1]); %Background color white
                 plot_mesh_undeformed(nel,ien,xn,nnp,nsd);
                 numbers(nel,ien,xn,nnp,nsd);
-                plot_mesh_deformed(type,xn,Ucomp,Idb,display_factor,Lcar,nel,ien,ndf,nsd,nen);
+                plot_mesh_deformed(type,xn,Ucomp,Idb,display_factor,Lcar,nel,ien,ndf,nsd,nen,axial);
                 view(nsd);
                 hold off;
             case 3
@@ -235,11 +235,13 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % deformed configuration %
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-function plot_mesh_deformed(type,xn,Ucomp,Idb,display_factor,Lcar,nel,ien,ndf,nsd,nen);
+function plot_mesh_deformed(type,xn,Ucomp,Idb,display_factor,Lcar,nel,ien,ndf,nsd,nen,axial);
 
 switch type
     case 'truss'
         scale=display_factor*Lcar/max(max(abs(Ucomp))); % scale factor for the displacements
+        legend_comp_flag = 0;
+        legend_ten_flag = 0;
         for e=1:nel
             node1=ien(1,e);
             node2=ien(2,e);
@@ -267,7 +269,28 @@ switch type
                 plot(xt(1,:),xt(2,:)','r-o');
             end
             if nsd == 3
-                plot3(xt(1,:),xt(2,:),xt(3,:), 'r-o');
+                if (axial(2,e) > 0)
+                   h(1,1) = plot3(xt(1,:),xt(2,:),xt(3,:), 'r-o');
+                   if legend_ten_flag == 0
+                       legend_ten_flag = 1;
+                   end
+                else
+                   h(2,1) = plot3(xt(1,:),xt(2,:),xt(3,:), 'b-o');
+                   if legend_comp_flag == 0
+                       legend_comp_flag = 1;
+                   end
+                end
+            end
+        end
+        if legend_comp_flag && legend_ten_flag
+            legend(h,'Tension', 'Compression')
+        else
+            if legend_comp_flag
+                legend(h(2,1),'Compression')
+            else
+                if legend_ten_flag
+                    legend(h(1,1),'Tension')
+                end
             end
         end
     case 'beam'

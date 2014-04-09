@@ -105,8 +105,8 @@ g=zeros(ndf,nnp);
 
 f = zeros(ndf,nnp);
 
-f(2,4) = 10;
-f(1,4) = 10;
+%f(2,4) = 50;
+f(3,4) = 50;
 
 % enter the values
 
@@ -299,4 +299,4 @@ disp(' ')
 % plot the results %
 %%%%%%%%%%%%%%%%%%%%
 
-plot_results('truss',xn,f,idb,Ucomp,Rcomp,ien,nel,nen,nsd,ndf,nnp);
+plot_results('truss',xn,f,idb,Ucomp,Rcomp,ien,nel,nen,nsd,ndf,nnp,axial);
