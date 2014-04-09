@@ -557,7 +557,12 @@ beta=3*display_factor*Lcar/max(max(abs(Rcomp))); % scale factor for reactions
 alpha=2*display_factor*Lcar; % scale factor for moment
 for N=1:nnp
     RN=zeros(ndf);
-    if (nsd >1)
+    if (nsd == 3)
+        if ( (Idb(1,N) ~= 0 ) | (Idb(2,N) ~= 0) | (Idb(3,N) ~= 0))
+            quiver3(xn(1,N),xn(2,N),xn(3,N),Rcomp(1,N),Rcomp(2,N),Rcomp(3,N),beta,'k','LineWidth',2);
+        end;
+    end
+    if (nsd == 2)
         if ((Idb(1,N) ~= 0) | (Idb(2,N) ~= 0))
             h = quiver(xn(1,N),xn(2,N),Rcomp(1,N),Rcomp(2,N),beta,'k', 'LineWidth', 2);
             adjust_quiver_arrowhead_size(h, 0.5/beta);
@@ -570,7 +575,8 @@ for N=1:nnp
                 plot_moments([xn(1,N);xn(2,N)],alpha,1);
             end;
         end;
-    else
+    end
+    if (nsd == 1)
         if (Idb(1,N) ~= 0)
             h = quiver(xn(1,N),0,Rcomp(1,N),0,beta,'k', 'LineWidth', 2);
             adjust_quiver_arrowhead_size(h, 0.5/beta);
