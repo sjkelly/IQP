@@ -5,12 +5,12 @@
 % plot results and b.c. for trusses,beams, heat conduction %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function plot_results(type,xn,f,Idb,Ucomp,Rcomp,ien,nel,nen,nsd,ndf,nnp,axial);
+function plot_results(type,xn,f,Idb,Ucomp,Rcomp,ien,nel,nen,nsd,ndf,nnp,axial)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                       TRUSS AND BEAM                                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if ( strcmp(type, 'truss') | strcmp(type,'beam'))
+if ( strcmp(type, 'truss') || strcmp(type,'beam'))
     
     display_factor=0.1;
     eps=1e-4;
@@ -235,7 +235,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % deformed configuration %
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-function plot_mesh_deformed(type,xn,Ucomp,Idb,display_factor,Lcar,nel,ien,ndf,nsd,nen,axial);
+function plot_mesh_deformed(type,xn,Ucomp,Idb,display_factor,Lcar,nel,ien,ndf,nsd,nen,axial)
 
 switch type
     case 'truss'
@@ -497,38 +497,39 @@ switch type
     case 'truss'
         for P=1:nnp
             if (nsd >1)
-                if ((Idb(1,P) ~= 0) & (Idb(2,P) ~= 0))
+                if ((Idb(1,P) ~= 0) && (Idb(2,P) ~= 0))
                     bc_symbols(xn(:,P),alpha,3,nsd);
                 end;
-                if ((Idb(1,P) ~= 0) & (Idb(2,P) == 0))
+                if ((Idb(1,P) ~= 0) && (Idb(2,P) == 0))
                     bc_symbols(xn(:,P),alpha,2,nsd);
                 end;
-                if ((Idb(1,P) == 0) & (Idb(2,P) ~= 0))
+                if ((Idb(1,P) == 0) && (Idb(2,P) ~= 0))
                     bc_symbols(xn(:,P),alpha,1,nsd);
                 end;
             else
-                if (Idb(1,P) ~= 0) bc_symbols([xn(1,P),0],alpha,2,nsd);
+                if (Idb(1,P) ~= 0)
+                    bc_symbols([xn(1,P),0],alpha,2,nsd);
                 end;
             end;
         end;
     case 'beam'
         for P=1:nnp
-            if ((Idb(1,P) ~= 0) & (Idb(2,P) ~= 0) & (Idb(3,P) == 0))
+            if ((Idb(1,P) ~= 0) && (Idb(2,P) ~= 0) && (Idb(3,P) == 0))
                 bc_symbols(xn(:,P),alpha,3,nsd);
             end;
-            if ((Idb(1,P) ~= 0) & (Idb(2,P) == 0) & (Idb(3,P) == 0))
+            if ((Idb(1,P) ~= 0) && (Idb(2,P) == 0) && (Idb(3,P) == 0))
                 bc_symbols(xn(:,P),alpha,2,nsd);
             end;
-            if ((Idb(1,P) == 0) & (Idb(2,P) ~= 0) & (Idb(3,P) == 0))
+            if ((Idb(1,P) == 0) && (Idb(2,P) ~= 0) && (Idb(3,P) == 0))
                 bc_symbols(xn(:,P),alpha,1,nsd);
             end;
-            if ((Idb(1,P) == 0) & (Idb(2,P) ~= 0) & (Idb(3,P) ~= 0))
+            if ((Idb(1,P) == 0) && (Idb(2,P) ~= 0) && (Idb(3,P) ~= 0))
                 bc_symbols(xn(:,P),alpha,4,nsd);
             end;
-            if ((Idb(1,P) ~= 0) & (Idb(2,P) == 0) & (Idb(3,P) ~= 0))
+            if ((Idb(1,P) ~= 0) && (Idb(2,P) == 0) && (Idb(3,P) ~= 0))
                 bc_symbols(xn(:,P),alpha,5,nsd);
             end;
-            if ((Idb(1,P) ~= 0) & (Idb(2,P) ~= 0) & (Idb(3,P) ~= 0))
+            if ((Idb(1,P) ~= 0) && (Idb(2,P) ~= 0) && (Idb(3,P) ~= 0))
                 bc_symbols(xn(:,P),alpha,6,nsd);
             end;
         end;
@@ -544,12 +545,12 @@ delta=display_factor*Lcar/max(max(abs(f))); % scale factor for force b.c.
 alpha=2*display_factor*Lcar; % scale factor for moment
 for N=1:nnp
     if ( nsd == 3)
-        if ( (f(1,N) ~= 0 ) | (f(2,N) ~= 0) | (f(3,N) ~= 0))
+        if ( (f(1,N) ~= 0 ) || (f(2,N) ~= 0) || (f(3,N) ~= 0))
             quiver3(xn(1,N),xn(2,N),xn(3,N),f(1,N),f(2,N),f(3,N),delta,'k','LineWidth',2);
         end;
     end
     if ( nsd == 2)
-        if ( (f(1,N) ~= 0 ) | (f(2,N) ~= 0))
+        if ( (f(1,N) ~= 0 ) || (f(2,N) ~= 0))
             quiver(xn(1,N),xn(2,N),f(1,N),f(2,N),delta,'k');
         end;
     end
@@ -581,17 +582,17 @@ alpha=2*display_factor*Lcar; % scale factor for moment
 for N=1:nnp
     RN=zeros(ndf);
     if (nsd == 3)
-        if ( (Idb(1,N) ~= 0 ) | (Idb(2,N) ~= 0) | (Idb(3,N) ~= 0))
+        if ( (Idb(1,N) ~= 0 ) || (Idb(2,N) ~= 0) || (Idb(3,N) ~= 0))
             h = quiver3(xn(1,N),xn(2,N),xn(3,N),Rcomp(1,N),Rcomp(2,N),Rcomp(3,N),beta,'r-o','LineWidth',2);
             adjust_quiver_arrowhead_size(h, 0.5/beta);
         end;
     end
     if (nsd == 2)
-        if ((Idb(1,N) ~= 0) | (Idb(2,N) ~= 0))
+        if ((Idb(1,N) ~= 0) || (Idb(2,N) ~= 0))
             h = quiver(xn(1,N),xn(2,N),Rcomp(1,N),Rcomp(2,N),beta,'r-o', 'LineWidth', 2);
             adjust_quiver_arrowhead_size(h, 0.5/beta);
         end;
-        if (strcmp(type, 'beam') & (Idb(3,N) ~= 0))
+        if (strcmp(type, 'beam') && (Idb(3,N) ~= 0))
             if (Rcomp(3,N) > eps)
                 plot_moments([xn(1,N);xn(2,N)],alpha,0);
             end;
@@ -615,7 +616,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              BOUNDARY CONDITIONS SYMBOLS                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function bc_symbols(xp,alpha,symbol,nsd);
+function bc_symbols(xp,alpha,symbol,nsd)
 if (nsd < 3)
     switch symbol
         case 1
@@ -755,7 +756,7 @@ end
 
 
 
-function circle(x0,r);
+function circle(x0,r)
 theta=0:0.1:2*pi;
 x=r*cos(theta)+x0(1);
 y=r*sin(theta)+x0(2);
@@ -767,7 +768,7 @@ plot(x,y,'k','LineWidth',1.2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                       MOMENTS                                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function plot_moments(xp,alpha,sign);
+function plot_moments(xp,alpha,sign)
 switch sign
     case 0  %positive moment
         r=alpha/4;
@@ -1051,7 +1052,11 @@ for index = first_nan_index : 4 : last_nan_index
     x_triplet = XData(these_indices);
     y_triplet = YData(these_indices);
     
-    if any(isnan(x_triplet)) || any(isnan(y_triplet))
+    if ~isempty(ZData)
+        z_triplet = ZData(these_indices);
+    end
+
+    if any(isnan(x_triplet)) || any(isnan(y_triplet)) || any(isnan(z_triplet))
         continue
     end
     
@@ -1061,14 +1066,28 @@ for index = first_nan_index : 4 : last_nan_index
     x_triplet(1) = x_triplet(2) - (delta_x * scaling_factor);
     y_triplet(1) = y_triplet(2) - (delta_y * scaling_factor);
         
+    if ~isempty(ZData)
+        delta_z = diff(z_triplet(1:2));
+        z_triplet(1) = z_triplet(2) - (delta_z * scaling_factor);
+    end
+
     %   Second pair.
     delta_x = diff(x_triplet(2:3));
     delta_y = diff(y_triplet(2:3));
     x_triplet(3) = x_triplet(2) + (delta_x * scaling_factor);
     y_triplet(3) = y_triplet(2) + (delta_y * scaling_factor);
     
+    if ~isempty(ZData)
+        delta_z = diff(z_triplet(2:3));
+        z_triplet(3) = z_triplet(2) - (delta_z * scaling_factor);
+    end
+
     XData(these_indices) = x_triplet;
     YData(these_indices) = y_triplet;
+
+    if ~isempty(ZData)
+       ZData(these_indices) = z_triplet;
+    end
 end
 
-set(arrowhead_line, 'XData', XData, 'YData', YData);
+set(arrowhead_line, 'XData', XData, 'YData', YData, 'ZData', ZData);
