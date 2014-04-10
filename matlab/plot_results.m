@@ -545,7 +545,6 @@ delta=display_factor*Lcar/max(max(abs(f))); % scale factor for force b.c.
 alpha=2*display_factor*Lcar; % scale factor for moment
 for N=1:nnp
     if ( nsd == 3)
-<<<<<<< HEAD
         if ( (f(1,N) ~= 0 ) || (f(2,N) ~= 0) || (f(3,N) ~= 0))
             quiver3(xn(1,N),xn(2,N),xn(3,N),f(1,N),f(2,N),f(3,N),delta,'r','LineWidth',2);
         end;
